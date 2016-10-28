@@ -1,0 +1,175 @@
+--- # Example of Tag module 
+
+- hosts: appserver
+  user: test
+  sudo: yes
+  gather_facts: yes
+  tasks:
+   - name: Install the telnet and lynx package
+     yum: pkg={{item}} state=latest
+     with_items:
+          - telnet
+          - lynx
+     tags:
+          - packages
+   - name: verify that telnet was installed
+     raw: yum list installed > grep telnet > /home/test/play.log 
+     tags:
+         - verification
+
+
+Output:
+
+
+$ vim tags.yml
+
+$ ansible-playbook tags.yml --tags "packages"
+
+
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and
+make sure become_method is 'sudo' (default).
+This feature will be removed in a
+future release. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+
+PLAY [all] *********************************************************************
+
+TASK [setup] *******************************************************************
+ok: [server2]
+
+TASK [Install the telnet and lynx package] *************************************
+ok: [server2] => (item=[u'telnet', u'lynx'])
+
+PLAY RECAP *********************************************************************
+server2                    : ok=2    changed=0    unreachable=0    failed=0
+
+
+$ ansible-playbook tags.yml --tags "verification"
+
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and
+make sure become_method is 'sudo' (default).
+This feature will be removed in a
+future release. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+
+PLAY [all] *********************************************************************
+
+TASK [setup] *******************************************************************
+ok: [server2]
+
+TASK [verify that telnet was installed] ****************************************
+ok: [server2]
+
+PLAY RECAP *********************************************************************
+server2                    : ok=2    changed=0    unreachable=0    failed=0
+
+
+$ ansible-playbook tags.yml --tags "packages,verification"
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and
+make sure become_method is 'sudo' (default).
+This feature will be removed in a
+future release. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+
+PLAY [all] *********************************************************************
+
+TASK [setup] *******************************************************************
+ok: [server2]
+
+TASK [Install the telnet and lynx package] *************************************
+ok: [server2] => (item=[u'telnet', u'lynx'])
+
+TASK [verify that telnet was installed] ****************************************
+ok: [server2]
+
+PLAY RECAP *********************************************************************
+server2                    : ok=3    changed=0    unreachable=0    failed=0
+
+[prem@server1 Ansible]$
+
+
+
+]$ ansible-playbook tags.yml --skip-tags "packages"        [DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and
+make sure become_method is 'sudo' (default).
+This feature will be removed in a
+future release. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+
+PLAY [all] *********************************************************************
+
+TASK [setup] *******************************************************************
+ok: [server2]
+
+TASK [verify that telnet was installed] ****************************************
+ok: [server2]
+
+PLAY RECAP *********************************************************************
+server2                    : ok=2    changed=0    unreachable=0    failed=0
+
+[prem@server1 Ansible]$
+
+
+$ ansible-playbook tags.yml --start-at-task "Install the telnet and lynx package"
+
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and
+make sure become_method is 'sudo' (default).
+This feature will be removed in a
+future release. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+
+PLAY [all] *********************************************************************
+
+TASK [setup] *******************************************************************
+ok: [server2]
+
+TASK [Install the telnet and lynx package] *************************************
+ok: [server2] => (item=[u'telnet', u'lynx'])
+
+TASK [verify that telnet was installed] ****************************************
+ok: [server2]
+
+PLAY RECAP *********************************************************************
+server2                    : ok=3    changed=0    unreachable=0    failed=0
+
+
+
+[prem@server1 Ansible]$ ansible-playbook tags.yml --start-at-task "Install the telnet and lynx package" --step
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and
+make sure become_method is 'sudo' (default).
+This feature will be removed in a
+future release. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+
+PLAY [all] *********************************************************************
+Perform task: TASK: setup (N)o/(y)es/(c)ontinue: y
+
+Perform task: TASK: setup (N)o/(y)es/(c)ontinue: *******************************
+
+TASK [setup] *******************************************************************
+ok: [server2]
+Perform task: TASK: Install the telnet and lynx package (N)o/(y)es/(c)ontinue: y
+
+Perform task: TASK: Install the telnet and lynx package (N)o/(y)es/(c)ontinue: *
+
+$ ansible-playbook tags.yml --start-at-task "verify that telnet was installed"
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and
+make sure become_method is 'sudo' (default).
+This feature will be removed in a
+future release. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+
+PLAY [all] *********************************************************************
+
+TASK [setup] *******************************************************************
+ok: [server2]
+
+TASK [verify that telnet was installed] ****************************************
+ok: [server2]
+
+PLAY RECAP *********************************************************************
+server2                    : ok=2    changed=0    unreachable=0    failed=0
+
+
+
+
+

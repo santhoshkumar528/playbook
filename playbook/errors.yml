@@ -1,0 +1,15 @@
+--- # Example of errors module
+- hosts: appserver
+  user: test
+  sudo: yes
+  gather_facts: yes
+  tasks:
+   - name: Install httpd server
+     yum: pkg=httpd1 state=installed
+     ignore_errors: yes
+   - name: Install telnet
+     yum: pkg=telnet state=installed
+#   - name: Copy index.html
+#     copy: src=index.html  dest=/var/www/html/
+#   - name: start the service
+#     service: name=httpd state=started

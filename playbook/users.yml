@@ -1,0 +1,20 @@
+--- # Example of users module
+- hosts: appserver
+  user: test
+  sudo: yes
+  gather_facts: yes
+  tasks:
+   - name: creating users
+     yum: name={{item}} state=installed
+     with_items:
+       - '{{pkg2}}'
+       - lynx
+       - httpd
+#   - name: Install Apache package
+#     command: yum -y install httpd
+#     when: ansible_os_family == "RedHat"
+#   - name: Install Apache package 
+ #    command: apt-get -y install apache2
+#     when: ansible_os_family == "Debian" 
+    
+     

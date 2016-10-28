@@ -1,0 +1,8 @@
+--- # Example of unarchive module
+- hosts: appserver
+  user: test
+  become: yes
+  gather_facts: yes
+  tasks:
+   - name: Check whether directory exists
+     unarchive: src=playbook.tar.gz dest=/tmp/unarchive 

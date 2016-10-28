@@ -1,0 +1,15 @@
+--- # Example of setting up webserver
+- hosts: appserver
+  user: test
+  sudo: yes
+  tasks:
+   - name: Install httpd server
+     yum: pkg=httpd state=installed
+     async: 700
+     poll: 50
+   - name: Copy index.html
+     copy: src=index.html  dest=/var/www/html/
+     notify: start the service
+  handlers:
+   - name: start the service
+     service: name=httpd state=started

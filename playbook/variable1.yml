@@ -1,0 +1,24 @@
+--- # Example of using variables
+- hosts: '{{hosts}}'
+  user: '{{user}}'
+  sudo: yes
+  connection: ssh
+  gather_facts: yes
+  vars:
+      pkg: httpd
+  vars_files:
+      - conf/abc.yml
+  vars_prompt:
+      - name: pkg2
+        prompt: Enter Package name
+  tasks:
+   - name: Install httpd server
+     yum:  name={{pkg}} state=installed
+   - name: Install curl server
+     yum:  name={{pkg1}} state=installed
+   - name: Install package
+     yum:  name={{pkg2}} state=installed
+#   - name: Copy index.html
+#     copy: src=index.html  dest=/var/www/html/
+#   - name: start the service
+#     service: name=httpd state=started

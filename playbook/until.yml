@@ -1,0 +1,17 @@
+--- # Example of until module 
+- hosts: appserver
+  user: test
+  sudo: yes
+  gather_facts: yes
+  tasks:
+   - name: Install httpd
+     yum: name=httpd state=installed
+   - name: start the service
+     service: name=httpd state=started
+   - name: verify the status
+     shell: service httpd status
+     register: result
+#     until: result.stdout.find("running")
+#     retries: 5
+#     delay: 5
+   - debug: var=result

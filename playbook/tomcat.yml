@@ -1,0 +1,19 @@
+--- # Example of Tomcat Installation 
+- hosts: server2
+  user: test
+  sudo: yes
+  gather_facts: yes
+  tasks:
+   - name: Remove older version of tomcat
+     file: path=/usr/local/tomcat state=absent
+   - name: Download Tomcat
+     get_url: url=http://www.us.apache.org/dist/tomcat/tomcat-8/v8.0.33/bin/apache-tomcat-8.0.33.tar.gz dest=/tmp
+   - name: Extract archive
+     command: chdir=/tmp /bin/tar xvf apache-tomcat-8.0.33.tar.gz
+   - name: Copy tomcat folder
+     command:  mkdir /usr/local/tomcat
+   - name: move the directory
+     command: mv /tmp/apache-tomcat-8.0.33/ /usr/local/tomcat
+   - name: Start Tomcat
+     command: nohup  /usr/local/tomcat/apache-tomcat-8.0.33/bin/startup.sh &
+     sudo: yes

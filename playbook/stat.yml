@@ -1,0 +1,14 @@
+--- # Example of stat module
+- hosts: appserver
+  user: test
+  become: yes
+  gather_facts: yes
+  tasks:
+   - name: Check whether directory exists
+     stat: path=/home/test/xyz
+     register: p
+   - debug: msg="Path exists and is an directory"
+     when: p.stat.isdir is defined and p.stat.isdir
+   - name: create directory
+     shell: mkdir /home/test/xyz
+     when: p.stat.isdir|failure 

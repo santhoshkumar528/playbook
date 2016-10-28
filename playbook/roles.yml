@@ -1,0 +1,7 @@
+--- # Example of webserver setup using roles
+- hosts: appserver
+  user: test
+  sudo: yes
+  connection: ssh
+  roles:
+   - webservers

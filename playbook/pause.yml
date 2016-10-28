@@ -1,0 +1,16 @@
+--- # Example of Pause module 
+- hosts: appserver
+  user: test
+  sudo: yes
+  gather_facts: yes
+  tasks:
+   - name: Install the telnet and lynx package
+     yum: pkg={{item}} state=latest
+     with_items:
+          - telnet
+          - lynx
+   - name: pause
+     pause:
+        prompt: Press Enter to Continue
+   - name: verify that telnet was installed
+     raw: yum list installed > grep telnet > /home/test/play.log 

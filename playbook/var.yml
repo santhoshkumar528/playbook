@@ -1,0 +1,62 @@
+--- # Example of using variables
+- hosts: '{{hosts}}'
+  user: '{{user}}'
+  sudo: yes
+  #connection: ssh
+  gather_facts: yes
+  vars:
+      pkg: httpd
+  vars_files:
+      - conf/abc.yml
+  vars_prompt:
+      - name: pkg2
+        prompt: Enter Package name
+        private:no
+  tasks:
+   - name: Install httpd server
+     yum:  name={{pkg}} state=installed
+   - name: Install curl server
+     yum:  name={{pkg1}} state=installed
+   - name: Install package
+     yum:  name={{pkg2}} state=installed
+   - name: Install package
+     yum:  name='{{pkgg}}' state=installed
+#   - name: Copy index.html
+#     copy: src=index.html  dest=/var/www/html/
+#   - name: start the service
+#     service: name=httpd state=started
+
+
+
+
+
+[prem@server1 ~]$ vim var.yml
+[prem@server1 ~]$ ansible-playbook var.yml --extra-vars "hosts=server2 user=prem pkgg=telnet"
+
+
+[DEPRECATION WARNING]: Instead of sudo/sudo_user, use become/become_user and make sure become_method is 'sudo' (default).
+This feature will be removed in a future
+release. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+Enter Package name: telnet
+
+PLAY [server2] *****************************************************************
+
+TASK [setup] *******************************************************************
+ok: [server2]
+
+TASK [Install httpd server] ****************************************************
+ok: [server2]
+
+TASK [Install curl server] *****************************************************
+ok: [server2]
+
+TASK [Install package] *********************************************************
+ok: [server2]
+
+TASK [Install package] *********************************************************
+ok: [server2]
+
+PLAY RECAP *********************************************************************
+server2                    : ok=5    changed=0    unreachable=0    failed=0
+
+[prem@server1 ~]$
